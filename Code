@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+    <head>        
+        <style>
+            body {
+                background:#21232e;
+            }
+            h1 {
+              text-align: center;
+              font-size: 70px;
+              font-family: Arial, Helvetica, sans-serif;
+              margin-top: 60px;
+              color: #d0e4f2;
+            }
+            h2 {
+              text-align: center;
+              font-size: 40px;
+              font-family: Arial, Helvetica, sans-serif;
+              margin-top: 50px;
+              margin-bottom: 2000px;
+              color: #d0e4f2;
+            }
+            p {
+              background: #21232e;
+              text-align: center;
+              font-size: 200px;
+              font-family: "Lucida Console", "Courier New", monospace;
+              margin-top: 0px;
+              margin-bottom:2000px;
+              color: #3ff266;
+            }
+
+            .button {
+                width:100%;
+                height:50px;
+                background-color:#3f5af2;
+                border-style:solid;
+                border-color: #04255c;
+                border-width:5px;
+                
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            .button:hover {background-color: #023ea3}
+            .button:active {
+              background-color: #023ea3;
+              transform: translateY(4px);
+            }
+            
+            .prevent-select {
+                user-select: none; /* Standard syntax */
+            }
+            
+        </style>
+    </head>
+    
+    <body>
+
+        <!--
+        <h1 id="titleTxt"></h1>
+        <h1 id="h1Txt"></h1>
+        <h2 id="h2Txt"></h2>
+        -->
+
+        <p id="timer" class="prevent-select" onclick="timerTick();" ></p>
+
+        <button class="button" onclick="timerDisplay=1;">Display in H:M:S</button>
+        <button class="button" onclick="timerDisplay=2;">Display in M:S:MS</button>
+
+        <script>
+            // Set the date we're counting down to
+            var timerDisplay = 1;
+            var timerPrint = "0:00.000";
+            var go = 0;
+            var start;
+            
+            var hours = 0;
+            var minutes = 0;
+            var seconds = 0;
+            var milli = 0;
+            
+            document.getElementById("timer").innerHTML = "0:00.000";
+            
+            var timerTick = function() {
+                go+=1;
+                if (go>2){go=0;}
+            };
+            
+            // Update the count down every 1 second
+            var x = setInterval(function() {
+                document.getElementById("timer").style.fontSize = window.innerWidth/7 + "px";
+                document.getElementById("timer").style.marginTop = window.innerHeight/3 + "px";
+                
+                if (go===1) {
+                    document.getElementById("timer").style.color = "#3ff266";
+                    
+                    // Get today's date and time
+                    var now = new Date().getTime();
+
+                    // Find the distance between now and the count down date
+                    var distance = now-start;
+
+                    // Time calculations for days, hours, minutes and seconds
+                    hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    milli = Math.floor((distance % (1000 * 60)) / 1) - (seconds*1000);
+
+                    // change printing meathod of time if below certain numbers (ie. if seconds>10)
+                    if (minutes<10) {minutes = "0"+minutes;}
+                    if (seconds<10) {seconds = "0"+seconds;}
+                    if (milli<10) {milli = "00"+milli;} else if (milli<100) {milli = "0"+milli;}
+                    
+                } else {
+                  start = new Date();
+                  if (go===0) {
+                      document.getElementById("timer").style.color = "#696969";
+                      hours = 0;
+                      minutes = "00";
+                      seconds = "00";
+                      milli = "000";
+                  }
+                  if (go===2) {
+                      document.getElementById("timer").style.color = "#3f75f2";
+                  }
+                }
+                
+                if (timerDisplay===1) {
+                    timerPrint = minutes+":"+seconds+"."+milli;
+                } else if (timerDisplay===2) {
+                    timerPrint = hours+":"+minutes+":"+seconds;
+                }
+                
+                document.getElementById("timer").innerHTML = timerPrint;
+
+            }, 1);
+        </script>
+    </body>
+</html>
